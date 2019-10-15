@@ -337,6 +337,10 @@ public class Principal {
         System.out.println("Gastos extras: ");
         gastos = pedirDecimal();
         
+        System.out.println("Estas son las matrículas: ");
+        for(int j = 0; j < motos.size(); j++)
+            System.out.println(motos.get(j).getMatricula() +"\n");
+        
         while(encontrado == false){
             
             if(matricula.equals(motos.get(i).getMatricula()))
@@ -347,6 +351,50 @@ public class Principal {
             else
                 i++;
         }
+    }
+    
+    
+    public void EliminarSocio(){
+        
+        int pos = -1;            //Posición del socio en la lista socio
+        int pos_s = -1;          // Posición de usuarios a dar la motocicleta
+        Boolean encontrado = false;
+        Boolean socio_correcto = false;
+        System.out.println("Dame el id del socio a dar de baja.\nEstos son los socios que hay:");
+
+        
+        //Mostramos por pantalla los socios
+        for(int i = 0; i < socios.size(); i++){
+            System.out.println(socios.get(i).toString());
+        }
+        
+        //Pedimos a la fuerza un entero y que este entero sea una id de algún socio. Luego se guarda en pos la posición del socio
+        while(encontrado == false){
+            
+            if((pos = VerificarSocio(pedirEntero())) != -1)
+                encontrado = true;
+        }
+        
+        //Si el socio tiene motocicletas, se las repartimos a los otros socios
+        if(socios.get(pos).mis_motos.isEmpty() == false){
+            System.out.println("El socio tiene motocicletas en su poder. Se han de resolver\n");
+            for(int i = 0; i < socios.get(pos).mis_motos.size(); i++){
+                System.out.println("Dime a qué socio quieres meter la matrícula " + socios.get(pos).mis_motos.get(i).getMatricula());
+                
+               while(socio_correcto == false){
+                   
+                   if((socios.get(i).getMoney()+socios.get(pos).mis_motos.get(i).getPrecio()) <= valor_maximo)
+                       System.out.println("Socio con pocos recursos");
+                   else if((pos_s = VerificarSocio(pedirEntero())) != -1)
+                       socio_correcto = true;
+               }
+               socio_correcto = false;
+               
+               socios.get(pos_s).addMoto(socios.get(pos).mis_motos.get(i));
+            }
+        }
+            
+        socios.remove(pos);
     }
     /*
             FUNCIONES AUXILIARES
