@@ -17,11 +17,12 @@ public class Moto {
     private int tipo;               //Aquí clasifico como quiero la moto
     private String descripcion;
     private int id_socio;           //Referencia al id del socio al que peretecene
+    private float gastos;
     
     /*
         Creación de la moto. El socio no es imprescindible, pues en la clase Principal ya se pide
     */
-    public Moto(String matricula,float precio, int tipo, String descripcion, int id_socio){
+    public Moto(String matricula,float precio, int tipo, String descripcion, int id_socio, float gastos){
         
         this.matricula = matricula;
         this.precio = precio;
@@ -29,16 +30,16 @@ public class Moto {
         this.descripcion = descripcion;
         
         this.id_socio = id_socio;
-        
+        this.gastos = gastos;
     }
     //Creación cuando no queremos meterlo toda en una, sino poco a pooc (ya tú sabe;))
     public Moto(){
-        
+        gastos = 0;
     }
     
     //Creación de una moto con matrícula
     public Moto(String matricula){
-        
+        gastos = 0;
         this.matricula = matricula;
     }
     
@@ -89,5 +90,16 @@ public class Moto {
     
     public int getSocio(){
         return id_socio;
+    }
+    
+    public void setGastos(float gastos){
+        
+        this.gastos = this.gastos + gastos;
+    }
+    
+    @Override
+    public String toString(){
+        
+        return "Matrícula: "+ matricula + "\t Precio: " + precio + "Tipo: "+ tipo + "\tDescripción: " + descripcion + "\tSocio: " + id_socio + "\tGastos: "+gastos+"\n";
     }
 }

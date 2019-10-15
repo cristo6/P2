@@ -36,19 +36,19 @@ public class Principal {
         motos = new ArrayList();
         cesiones = new ArrayList();
         
-        /* Inicialización por si los pelos
+        // Inicialización por si los pelos
         socios.add(new Socio(1, "Pedro"));
         socios.add(new Socio(2, "Oscar"));
         socios.add(new Socio(3, "Carls"));
-        motos.add(new Moto("aa1", 123, 1, "Perros", 1));
-        motos.add(new Moto("aa2", 123, 2, "Ptoss", 2));
-        motos.add(new Moto("aa3", 111, 3, "Tres", 3));
+        motos.add(new Moto("aa1", 123, 1, "Perros", 1,0));
+        motos.add(new Moto("aa2", 123, 2, "Ptoss", 2, 0));
+        motos.add(new Moto("aa3", 111, 3, "Tres", 3, 0));
         
         socios.get(0).addMoto(motos.get(0));
         socios.get(1).addMoto(motos.get(1));
         socios.get(2).addMoto(motos.get(2));
         
-        */
+        
     }
     
     public void registrarMoto(){
@@ -92,6 +92,9 @@ public class Principal {
         System.out.println("Descripción: ");
         Scanner descp = new Scanner(System.in);
         moto.setDescripcion(descp.nextLine());
+        
+        System.out.println("Gastos: ");
+        moto.setGastos(pedirDecimal());
         
         //Escogermos un socio dispoble
         System.out.println("Esta es la opción de socios disponibles. Selecciona su id");
@@ -225,7 +228,7 @@ public class Principal {
             return;
         }
         for(int i = 0; i < motos.size(); i++){
-            System.out.println("\t"+motos.get(i).getMatricula()+ "\t" +"con id: " + motos.get(i).getSocio());
+            System.out.println(motos.get(i).toString());
         }
     }
     
@@ -318,6 +321,32 @@ public class Principal {
     
     void Valor_Maximo(){
         valor_maximo = pedirEntero();
+    }
+    
+    void IncrementarGastos(){
+        
+        String matricula;
+        float gastos;
+        Boolean encontrado = false;
+        int i = 0;
+        System.out.println("Dame la matrícula: ");
+        Scanner matri = new Scanner(System.in);
+        
+        matricula = matri.nextLine();
+        
+        System.out.println("Gastos extras: ");
+        gastos = pedirDecimal();
+        
+        while(encontrado == false){
+            
+            if(matricula.equals(motos.get(i).getMatricula()))
+            {
+                motos.get(i).setGastos(gastos);
+                encontrado = true;
+            }
+            else
+                i++;
+        }
     }
     /*
             FUNCIONES AUXILIARES
@@ -427,7 +456,8 @@ public class Principal {
             System.out.println("4. Listar en pantalla los miembros con motos en posesión\n");
             System.out.println("5. Listar todas las motos\n");
             System.out.println("6. Mostrar las cesiones realizadas\n");
-            System.out.println("7. Salir del programa\n");
+            System.out.println("7. Incrementar gastos\n");
+            System.out.println("8. Salir del programa\n");
             System.out.println("------------------------------------------------------------------------------\n");
             int caso = prin.pedirEntero();
          
@@ -445,7 +475,9 @@ public class Principal {
                     break;
                 case 6: prin.MostrarCesiones();
                     break;
-                case 7: prin.Salir();
+                case 7: prin.IncrementarGastos();
+                    break;
+                case 8: prin.Salir();
                     break;
                 default: System.out.println("Elección incorrecta, pendejo. Pruebe otra vez.\n");
             }
