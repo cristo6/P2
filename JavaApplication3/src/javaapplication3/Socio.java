@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author alumno
  */
 public class Socio {
-    
+    static int id_general = 0;
     private int id_socio;
     private String nombre;
     private float money;
@@ -20,10 +20,12 @@ public class Socio {
     
     public Socio(int id_socio, String nombre){
         
-        this.id_socio = id_socio;
+        //this.id_socio = id_socio;
         this.nombre = nombre;
         mis_motos = new ArrayList();
         money = 0;
+        id_general++;
+        id_socio = id_general;
     }
     
     public Socio(){

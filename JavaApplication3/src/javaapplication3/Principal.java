@@ -28,6 +28,8 @@ public class Principal {
     private ArrayList<Moto> motos;
     private ArrayList<Cesion> cesiones;
     
+    private int valor_maximo = 0;
+    
     public Principal(){
         
         socios = new ArrayList();
@@ -95,7 +97,7 @@ public class Principal {
         System.out.println("Esta es la opción de socios disponibles. Selecciona su id");
         System.out.println("---------------------------------------------------------------------\n");
         for(int i = 0; i < socios.size(); i++){
-            if((socios.get(i).getMoney()+moto.getPrecio()) <= 6000){
+            if((socios.get(i).getMoney()+moto.getPrecio()) <= valor_maximo){
                 System.out.println(socios.get(i).toString());
                 ids_correctos.add(socios.get(i).getId_socio());
                 socio_disp = true;
@@ -312,6 +314,11 @@ public class Principal {
         System.out.println("Fue un éxito el fichero");
         exit(0);
     }
+    
+    
+    void Valor_Maximo(){
+        valor_maximo = pedirEntero();
+    }
     /*
             FUNCIONES AUXILIARES
     */
@@ -364,7 +371,7 @@ public class Principal {
         
         Scanner matri = new Scanner(System.in);
         matri_final = matri.nextLine();
-        /* No sé por qué, pero el código original no me funciona, asi que me adapto para que compile
+         /*No sé por qué, pero el código original no me funciona, asi que me adapto para que compile
         int i = 0;
         int max = socio.mis_motos.size();
         Boolean hecho = false;
@@ -372,11 +379,11 @@ public class Principal {
         while(i < max && hecho == false){
             
             Scanner mat = new Scanner(System.in);
-            
+            String matricula = mat.nextLine();
             for(int j = 0; j < max; j++){
-                if(socio.mis_motos.get(j).getMatricula().endsWith(mat.nextLine())){
+                if(socio.mis_motos.get(j).getMatricula().equals(matricula)){
                     hecho = true;
-                    matri_final = mat.nextLine();
+                    matri_final = matricula;
                 }
             }
             i++;
@@ -410,6 +417,8 @@ public class Principal {
         
         Principal prin = new Principal();
         
+        System.out.println("Deme el coste máximo de los socios");
+        prin.Valor_Maximo();
         
         while(true){
             System.out.println("1. Registrar un nuevo miembro\n");
