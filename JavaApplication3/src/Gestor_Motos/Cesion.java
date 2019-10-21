@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication3;
+package Gestor_Motos;
 
 /**
  *
@@ -42,13 +42,15 @@ public class Cesion {
             while(!(resultado = matricula.equals(emisor.mis_motos.get(i).getMatricula()))){
                 i++;
             }
-
+            
+            //Una vez encontrada, sé su posición 'i'
             if(resultado){
                 if(receptor.getMoney()+emisor.mis_motos.get(i).getPrecio() <= 6000){
 
                     resultado = true; 
-                    emisor.addMoto(receptor.getMoto(i));
-                    receptor.deleteMoto(i);
+                    emisor.getMoto(i).setSocio(receptor.getId_socio());
+                    receptor.addMoto(emisor.getMoto(i));
+                    emisor.deleteMoto(i);
                 }
                 else
                     System.out.println("Error: El socio receptor sobresale de los límites monetarios para adquirir la moto.\n");

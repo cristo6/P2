@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication3;
+package Gestor_Motos;
 
 
 /**
@@ -97,9 +97,13 @@ public class Moto {
         this.gastos = this.gastos + gastos;
     }
     
+    public void cambiarSocio(int id_socio){
+        this.id_socio = id_socio;
+    }
+    
     @Override
     public String toString(){
         
-        return "Matrícula: "+ matricula + "\t Precio: " + precio + "Tipo: "+ tipo + "\tDescripción: " + descripcion + "\tSocio: " + id_socio + "\tGastos: "+gastos+"\n";
+        return "Matrícula: "+ matricula + "\t Precio: " + precio + "\t Tipo: "+ tipo + "\tDescripción: " + descripcion + "\tSocio: " + id_socio + "\tGastos: "+gastos+"\n";
     }
 }

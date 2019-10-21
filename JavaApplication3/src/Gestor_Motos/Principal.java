@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication3;
+package Gestor_Motos;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +11,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import static java.lang.System.exit;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 
 /**
@@ -40,15 +44,26 @@ public class Principal {
         socios.add(new Socio(1, "Pedro"));
         socios.add(new Socio(2, "Oscar"));
         socios.add(new Socio(3, "Carls"));
+        socios.add(new Socio(4, "Juan"));
+        socios.add(new Socio(5, "Coco"));
+        socios.add(new Socio(6, "Perl"));
+        
         motos.add(new Moto("aa1", 123, 1, "Perros", 1,0));
         motos.add(new Moto("aa2", 123, 2, "Ptoss", 2, 0));
-        motos.add(new Moto("aa3", 111, 3, "Tres", 3, 0));
+        motos.add(new Moto("aa3", 166, 3, "Tres", 3, 0));
+        motos.add(new Moto("aa4", 1000, 4, "Jaguar", 4, 0));
+        motos.add(new Moto("aa5", 500, 5, "Chatarra", 5, 0));
+        motos.add(new Moto("aa6", 999, 6, "algo", 6, 0));
         
+        for(int i = 0; i < 6; i++){
+            socios.get(i).addMoto(motos.get(i));
+        }
+        /*
         socios.get(0).addMoto(motos.get(0));
         socios.get(1).addMoto(motos.get(1));
         socios.get(2).addMoto(motos.get(2));
-        
-        
+        socios.get(3).addMoto(motos.get(3));
+        */
     }
     
     public void registrarMoto(){
@@ -160,31 +175,49 @@ public class Principal {
             System.out.println("\tNo hay suficientes socios para realizar la cesión\n");
             return;
         }
+        
         Cesion cesion = new Cesion();
         int pos_1 = -1;                 //Posición del vector de Socios del socio emisor
         int pos_2 = -1;                 //Posición del vector de Socios del socio receptor
 
         int id1;
         int id2;
-        
-        System.out.println("Los usuarios son estos:\n");
+        Boolean salida_emisor = false, salida_receptor = false;
+        System.out.println("Todos los usuarios son estos:\n");
         System.out.println("-------------------------------------------------\n");
         
         for(int i = 0; i < socios.size(); i++){
-            System.out.println(socios.get(i).toString());
+                System.out.println(socios.get(i).toString());
         }
         
         System.out.println("Dame los identificadores de los socios:\n");
         
+        //Pido el id del socio que dará la moto
         do{
             System.out.println("Socio emisor: ");
             id1 = pedirEntero();
-        }while((pos_1 = VerificarSocio(id1))== -1);
-
+            
+            if((pos_1 = VerificarSocio(id1))== -1){
+               System.out.println("\n\tEl socio no existe\n");
+            }
+            
+            else if(socios.get(pos_1).mis_motos.isEmpty()){
+                System.out.println("\n\tEl socio no no tiene motocicletas en su poder\n");
+            }
+            else
+                salida_emisor = true;
+        }while(salida_emisor == false);
+        
+        //Pido el id del socio que recibirá la moto
         do{
             System.out.println("Socio receptos: ");
             id2 = pedirEntero();
-        }while((pos_2 = VerificarSocio(id2)) == -1);
+            if((pos_2 = VerificarSocio(id2))== -1){
+               System.out.println("\n\tEl socio no existe\n");
+            }
+            else
+                salida_receptor = true;
+        }while(salida_receptor == false);
         
         System.out.println("\n\tÉstos son las motocicletas del socio emisor\n");
         for(int i = 0; i < socios.get(pos_1).mis_motos.size();i++)
@@ -253,6 +286,16 @@ public class Principal {
         FileWriter writer;
         BufferedWriter buffer;
         String cadena = "";
+        String aux_salida;
+        System.out.println("¿Quiere guardar el archivo? [Y/N]");
+        
+        Scanner salida = new Scanner(System.in);
+        aux_salida = salida.nextLine();
+        if(aux_salida.equals("N")|| aux_salida.toUpperCase().equals("NO")){
+         
+            System.out.println("Salida exitosa");
+            exit(0);
+        }
         
         System.out.println("\n\tDeme el nombre que quiere adjuntarle al fichero: ");
         Scanner name = new Scanner(System.in);
@@ -325,6 +368,10 @@ public class Principal {
     
     void IncrementarGastos(){
         
+        if(motos.isEmpty()){
+            System.out.println("Error: No hay motocicletas asignadas\n");
+            return;
+        }
         String matricula;
         float gastos;
         Boolean encontrado = false;
@@ -395,6 +442,37 @@ public class Principal {
         }
             
         socios.remove(pos);
+    }
+    
+    //Se listarán los 3 usuarios con más cesiones recibidas
+    public void miembrosMasCesiones(){
+        
+        Map<Socio, Integer> socios_cesiones = new HashMap();
+        Socio socio_actual;
+        
+        if(cesiones.isEmpty()){
+            System.out.println("\nError: No ha habido ninguna transferencia\n");
+            return;
+        }
+        
+        //Obtengo en una lista map los socios no repidos, y además, cuántas  veces aparecieron
+        for(int i = 0; i < cesiones.size(); i++){
+            
+            socio_actual = cesiones.get(i).getReceptor();
+            if(socios_cesiones.containsKey(socio_actual) == false)
+                socios_cesiones.put(socio_actual, 1);
+            else
+                socios_cesiones.put(socio_actual, socios_cesiones.get(socio_actual)+1);
+                
+        }
+        
+
+        System.out.println("Socios\t\tNº cesiones\n");
+        for(Map.Entry<Socio, Integer> it : socios_cesiones.entrySet()){
+            System.out.println(it.getKey().getId_socio() + "\t\t" + it.getValue()+"\n");
+        }
+
+
     }
     /*
             FUNCIONES AUXILIARES
@@ -505,7 +583,8 @@ public class Principal {
             System.out.println("5. Listar todas las motos\n");
             System.out.println("6. Mostrar las cesiones realizadas\n");
             System.out.println("7. Incrementar gastos\n");
-            System.out.println("8. Salir del programa\n");
+            System.out.println("8. Miembros con más cesiones\n");
+            System.out.println("9. Salir del programa\n");
             System.out.println("------------------------------------------------------------------------------\n");
             int caso = prin.pedirEntero();
          
@@ -525,9 +604,11 @@ public class Principal {
                     break;
                 case 7: prin.IncrementarGastos();
                     break;
-                case 8: prin.Salir();
+                case 8: prin.miembrosMasCesiones();
                     break;
-                default: System.out.println("Elección incorrecta, pendejo. Pruebe otra vez.\n");
+                case 9: prin.Salir();
+                    break;
+                default: System.out.println("Elección. Pruebe otra vez.\n");
             }
         }
     }
